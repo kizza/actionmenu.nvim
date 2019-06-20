@@ -1,0 +1,60 @@
+*actionmenu.txt*                                      A nice contextmenu for vim
+
+Version: 0.0.0-beta.1
+Author: Keiran O'Leary <hello at keiranoleary.com>
+
+==============================================================================
+OVERVIEW                                                   *actionmenu-overview*
+
+A nice context menu for vim. This is intended for use within vim plugins or
+scripts, to popup open a context menu and provide a callback with the selected
+item.
+
+==============================================================================
+USAGE                                                         *actionmenu-usage*
+
+call actionmenu#open(`items`, `callback`)
+
+Arguments:
+- `items` each item can be a string or a dictionary (see |complete-items|)
+- `callback` either a string or a |funcref()|
+  - will be invoked with the `index` (zero based) and `item`
+  - cancelling a selection will invoke the callback with an `index` of -1
+
+------------------------------------------------------------------------------
+1. Example using a an array of strings, and a lambda callback
+
+call actionmenu#open(
+  \ ['First', 'Second', 'Third'],
+  \ { index, item -> mycallback(index, item) }
+  \ )
+
+------------------------------------------------------------------------------
+2. Example using an array of |complete-items| and a |funcref()|
+
+let l:items = [
+  \ { 'word': 'First', 'abbr': '1st', 'user_data': 'Custom data 1' },
+  \ { 'word': 'Second', 'abbr': '2nd', 'user_data': 'Custom data 2' }
+  \ { 'word': 'Third', 'abbr': '3rd', 'user_data': 'Custom data 3' }
+  \ ]
+
+call actionmenu#open(
+  \ l:items,
+  \ function('mycallback')
+  \ )
+
+------------------------------------------------------------------------------
+3. Example using a an array of strings, and a string callback
+
+call actionmenu#open(
+  \ ['First', 'Second', 'Third'],
+  \ 'mycallback'
+  \ )
+
+==============================================================================
+LICENSE                                                     *actionmenu-license*
+
+MIT
+
+==============================================================================
+vim:tw=78:sw=2:ts=2:ft=help:norl:nowrap:
