@@ -1,0 +1,12 @@
+set nocompatible
+
+let g:test_vimrc_loaded = 1
+
+let s:plugin = expand('<sfile>:h:h:h')
+
+execute 'set runtimepath+='.s:plugin
+
+function TestCallback(index, item)
+  let g:test_callback_index = a:index
+  let g:test_callback_item = a:item
+endfunction
