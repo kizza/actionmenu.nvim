@@ -1,0 +1,27 @@
+{
+  "name": "actionmenu.nvim",
+  "version": "1.0.0",
+  "description": "A nice context menu for vim",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.0.10",
+    "mocha": "^6.1.4",
+    "neovim": "^4.5.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2"
+  },
+  "scripts": {
+    "test": "mocha --require ts-node/register --exit test/**/*.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kizza/actionmenu.nvim.git"
+  },
+  "author": "kizza (Keiran O'Leary)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kizza/actionmenu.nvim/issues"
+  },
+  "homepage": "https://github.com/kizza/actionmenu.nvim#readme"
+}
