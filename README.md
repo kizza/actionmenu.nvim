@@ -4,6 +4,8 @@
 
 This is intended for use within vim plugins or scripts, to open a context menu and provide a callback with the selected item.
 
+[![Build Status](https://travis-ci.org/kizza/actionmenu.nvim.svg?branch=master)](https://travis-ci.org/kizza/actionmenu.nvim)
+
 ## Usage
 
 The menu is opened with a simple function.  It will open at the current cursor location with whatever items your provide.
