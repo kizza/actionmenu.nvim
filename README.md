@@ -6,6 +6,7 @@ This is intended for use within vim plugins or scripts, to open a context menu a
 
 [![Build Status](https://travis-ci.org/kizza/actionmenu.nvim.svg?branch=master)](https://travis-ci.org/kizza/actionmenu.nvim)
 
+
 ## Usage
 
 The menu is opened with a simple function.  It will open at the current cursor location with whatever items your provide.
@@ -20,7 +21,42 @@ call actionmenu#open(items, callback, {opts})
   - Cancelling a selection will invoke the callback with an `index` of -1
 - `opts` _(optional)_ Currently allows you to specify the icon for the menu
 
-## Examples
+
+
+## Example with Coc Code Actions
+
+Use the actionmenu to list and execue available code actions [from coc.nvim plugin](https://github.com/neoclide/coc.nvim)
+
+Once both `actionmenu.nvim` and `coc.nvim` are installed, put the folowing in your `.vimrc` file
+
+```vim
+let s:code_actions = []
+
+func! ActionMenuCodeActions() abort
+  let s:code_actions = CocAction('codeActions')
+  let l:menu_items = map(copy(s:code_actions), { index, item -> item['title'] })
+  call actionmenu#open(l:menu_items, 'ActionMenuCodeActionsCallback')
+endfunc
+
+func! ActionMenuCodeActionsCallback(index, item) abort
+  if a:index >= 0
+    let l:selected_code_action = s:code_actions[a:index]
+    let l:response = CocAction('doCodeAction', l:selected_code_action)
+  endif
+endfunc
+```
+
+then map it to a keybinding eg. perhaps `<Leader>s`
+
+```vim
+nnoremap <silent> <Leader>s :call ActionMenuCodeActions()<CR>
+```
+
+[![asciicast](https://asciinema.org/a/LjjAko5LGx2xUZtom0BVxih3c.svg)](https://asciinema.org/a/LjjAko5LGx2xUZtom0BVxih3c)
+
+
+
+## More examples
 
 Simply paste the snippet below into your `.vimrc` then execute `:call Demo()`
 
@@ -75,7 +111,10 @@ func! Callback(index, item)
 endfunc
 ```
 
+
+
 ## Requirements
+
 The [latest version of neovim](https://github.com/neovim/neovim/wiki/Installing-Neovim) (which provides the "popup window" functionaity that is leveraged)
 
 ```
@@ -92,5 +131,10 @@ endif
 
 Once installed, you can try it out by running `:call actionmenu#example()`
 
+
+
 ## Finally
+
 Build it into your existing plugin or useful scripts however you like!
+
+
