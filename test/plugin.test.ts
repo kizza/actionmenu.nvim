@@ -147,6 +147,23 @@ describe("actionmenu", () => {
             assert.equal(item.user_data, "Foo");
           }
         }));
+
+      it("invokes the callback once", async () =>
+        withVim(async nvim => {
+          const buffer = nvim.buffer;
+
+          const selectAnItem = async () => {
+            await openActionMenu(nvim, ["One"], '"TestPrintCallback"');
+            await nvim.call("feedkeys", [ENTER]);
+          };
+
+          await selectAnItem();
+          await selectAnItem();
+          await selectAnItem();
+
+          const lines = await buffer.getLines();
+          assert.equal(lines.toString(), ["OneOneOne"].toString());
+        }));
     });
   });
 });
