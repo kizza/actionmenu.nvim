@@ -10,3 +10,11 @@ function TestCallback(index, item)
   let g:test_callback_index = a:index
   let g:test_callback_item = a:item
 endfunction
+
+function TestPrintCallback(index, item)
+  if type(a:item) == type("")
+    execute("normal! A" . a:item)
+  else
+    execute("normal! A" . a:item['word'])
+  endif
+endfunction

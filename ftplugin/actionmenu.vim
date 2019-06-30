@@ -1,9 +1,20 @@
+" Only load once (subsequent times, just open pum)
+if get(s:, 'loaded')
+  call actionmenu#open_pum()
+  finish
+endif
+let s:loaded = 1
+
 " Style the buffer
 setlocal signcolumn=no
 setlocal sidescrolloff=0
 
 " Defaults
 let s:selected_item = 0
+
+function! actionmenu#open_pum()
+  call feedkeys("i\<C-x>\<C-u>")
+endfunction!
 
 function! actionmenu#select_item()
   if pumvisible()
@@ -40,7 +51,6 @@ mapclear <buffer>
 inoremap <buffer> <expr> <CR> actionmenu#select_item()
 imap <buffer> <C-y> <CR>
 imap <buffer> <C-e> <esc>
-" noremap <buffer> <esc> actionmenu#close()
 inoremap <buffer> <Up> <C-p>
 inoremap <buffer> <Down> <C-n>
 inoremap <buffer> k <C-p>
@@ -67,4 +77,4 @@ setlocal completefunc=actionmenu#complete_func
 setlocal completeopt+=menuone
 
 " Open the pum immediately
-call feedkeys("i\<C-x>\<C-u>")
+call actionmenu#open_pum()

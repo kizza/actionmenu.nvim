@@ -14,10 +14,11 @@ export const ESC = String.fromCharCode(27);
 
 export const openActionMenu = async (
   nvim: NeovimClient,
-  items: ActionItem[]
+  items: ActionItem[],
+  callback = '"TestCallback"'
 ) => {
   await nvim.command(
-    `execute('call actionmenu#open(${JSON.stringify(items)}, "TestCallback")')`
+    `execute('call actionmenu#open(${JSON.stringify(items)}, ${callback})')`
   );
 };
 
