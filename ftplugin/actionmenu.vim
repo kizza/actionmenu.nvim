@@ -49,6 +49,7 @@ endfunction
 
 " Mappings
 mapclear <buffer>
+imapclear <buffer>
 inoremap <buffer> <expr> <CR> actionmenu#select_item()
 imap <buffer> <C-y> <CR>
 imap <buffer> <C-e> <esc>
