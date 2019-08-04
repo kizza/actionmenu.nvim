@@ -79,7 +79,7 @@ Below is an example using vim's `complete-items`
 func! Demo()
   let l:items = [
     \ { 'word': 'First', 'abbr': '1st', 'user_data': 'Custom data 1' },
-    \ { 'word': 'Second', 'abbr': '2nd', 'user_data': 'Custom data 2' }
+    \ { 'word': 'Second', 'abbr': '2nd', 'user_data': 'Custom data 2' },
     \ { 'word': 'Third', 'abbr': '3rd', 'user_data': 'Custom data 3' }
     \ ]
 
