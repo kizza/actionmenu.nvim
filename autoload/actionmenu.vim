@@ -33,7 +33,11 @@ function! actionmenu#open(items, callback, ...) abort
   else
     let l:icon = actionmenu#icon()
   endif
+
+  " Set the icon
+  call nvim_buf_set_option(s:buffer, 'modifiable', v:true)
   call nvim_buf_set_lines(s:buffer, 0, -1, v:true, [l:icon['character']])
+
   let g:ActionMenuCallback = a:callback
   let g:actionmenu#items = a:items
 

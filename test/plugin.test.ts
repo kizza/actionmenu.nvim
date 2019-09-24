@@ -36,6 +36,16 @@ describe("actionmenu", () => {
       assert.equal(visible, 1);
     }));
 
+  it("successfully opens the pum when nomodifiable is set globally", () =>
+    withVim(async nvim => {
+      await nvim.command("set nomodifiable");
+      await openActionMenu(nvim, ["One", "Two", "Three"]);
+
+      const visible = await nvim.call("pumvisible");
+
+      assert.equal(visible, 1);
+    }));
+
   describe("navigating the menu", () => {
     it("moves up and down with j and k", () =>
       withVim(async nvim => {
