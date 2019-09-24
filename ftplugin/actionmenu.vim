@@ -33,6 +33,7 @@ endfunction
 function! actionmenu#on_insert_leave()
   if type(s:selected_item) == type({})
     call actionmenu#callback(s:selected_item['user_data'], g:actionmenu#items[s:selected_item['user_data']])
+    let s:selected_item = 0   " Clear the selected item once selected
   else
     call actionmenu#callback(-1, 0)
   endif

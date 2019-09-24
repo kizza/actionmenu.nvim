@@ -164,6 +164,29 @@ describe("actionmenu", () => {
           const lines = await buffer.getLines();
           assert.equal(lines.toString(), ["OneOneOne"].toString());
         }));
+
+      it("clears the selected item on subsequent popups", async () =>
+        withVim(async nvim => {
+          const selectItemAndReturn = async () => {
+            await openActionMenu(nvim, ["Foo"]);
+            await nvim.call("feedkeys", [ENTER]);
+            const { index } = await callbackResult(nvim);
+            return index;
+          };
+
+          const selectedIndex = await selectItemAndReturn();
+          assert.equal(selectedIndex, 0);
+
+          const dontSelectAndReturn = async () => {
+            await openActionMenu(nvim, ["Foo"]);
+            await nvim.call("feedkeys", [ESC]);
+            const { index } = await callbackResult(nvim);
+            return index;
+          };
+
+          const notSelectedIndex = await dontSelectAndReturn();
+          assert.equal(notSelectedIndex, -1);
+        }));
     });
   });
 });
