@@ -23,7 +23,7 @@ function! actionmenu#open(items, callback, ...) abort
 
   " Create the buffer
   if !s:buffer
-    let s:buffer = nvim_create_buf(0, 1)
+    let s:buffer = nvim_create_buf(v:false, v:true)
     call nvim_buf_set_option(s:buffer, 'syntax', 'OFF')
   endif
 
@@ -54,7 +54,7 @@ function! actionmenu#open(items, callback, ...) abort
     \ 'col': 0
     \}
 
-  let g:actionmenu#win = nvim_open_win(s:buffer, 1, l:opts)
+  let g:actionmenu#win = nvim_open_win(s:buffer, v:true, l:opts)
   call nvim_win_set_option(g:actionmenu#win, 'foldenable', v:false)
   call nvim_win_set_option(g:actionmenu#win, 'wrap', v:true)
   call nvim_win_set_option(g:actionmenu#win, 'statusline', '')
