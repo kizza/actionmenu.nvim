@@ -83,7 +83,7 @@ endfunction
 
 function! actionmenu#close()
   if g:actionmenu#win
-    execute('close')
+    call feedkeys("\<C-w>\<C-c>")
     let g:actionmenu#win = 0
   endif
 endfunction

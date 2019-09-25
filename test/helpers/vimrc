@@ -13,8 +13,8 @@ endfunction
 
 function TestPrintCallback(index, item)
   if type(a:item) == type("")
-    execute("normal! A" . a:item)
+    call feedkeys("A" . a:item)
   else
-    execute("normal! A" . a:item['word'])
+    call feedkeys("A" . a:item['word'])
   endif
 endfunction
