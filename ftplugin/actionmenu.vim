@@ -50,13 +50,13 @@ endfunction
 " Mappings
 mapclear <buffer>
 imapclear <buffer>
-inoremap <buffer> <expr> <CR> actionmenu#select_item()
-imap <buffer> <C-y> <CR>
-imap <buffer> <C-e> <esc>
-inoremap <buffer> <Up> <C-p>
-inoremap <buffer> <Down> <C-n>
-inoremap <buffer> k <C-p>
-inoremap <buffer> j <C-n>
+inoremap <nowait><buffer> <expr> <CR> actionmenu#select_item()
+imap <nowait><buffer> <C-y> <CR>
+imap <nowait><buffer> <C-e> <esc>
+inoremap <nowait><buffer> <Up> <C-p>
+inoremap <nowait><buffer> <Down> <C-n>
+inoremap <nowait><buffer> k <C-p>
+inoremap <nowait><buffer> j <C-n>
 
 " Events
 autocmd InsertLeave <buffer> :call actionmenu#on_insert_leave()
