@@ -115,7 +115,9 @@ function! actionmenu#example3() abort
 endfunction
 
 function! actionmenu#example_callback(index, item) abort
-  if type(a:item) == type("")
+  if a:index == -1
+    echo "No item selected"
+  elseif type(a:item) == type("")
     echo "Selected ". a:item . " position " . a:index
   else
     echo "Selected ". a:item['word'] . " position " . a:index . " (user_data = ". a:item['user_data'] . ")"

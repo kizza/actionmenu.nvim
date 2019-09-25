@@ -1,9 +1,9 @@
 " Only load once (subsequent times, just open pum)
-if get(s:, 'loaded')
-  call actionmenu#open_pum()
-  finish
-endif
-let s:loaded = 1
+" if get(s:, 'loaded')
+"   call actionmenu#open_pum()
+"   finish
+" endif
+" let s:loaded = 1
 
 " Style the buffer
 setlocal signcolumn=no
@@ -59,7 +59,10 @@ inoremap <nowait><buffer> k <C-p>
 inoremap <nowait><buffer> j <C-n>
 
 " Events
-autocmd InsertLeave <buffer> :call actionmenu#on_insert_leave()
+augroup actionmeun
+  autocmd!
+  autocmd InsertLeave <buffer> :call actionmenu#on_insert_leave()
+augroup END
 
 " pum completion function
 function! actionmenu#complete_func(findstart, base)
