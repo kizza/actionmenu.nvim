@@ -23,7 +23,23 @@ call actionmenu#open(items, callback, {opts})
 
 
 
-## Example with Coc Code Actions
+## A simple example
+
+Just paste the snippet below into your `.vimrc` then execute `:call Demo()`
+
+```vim
+func! Demo()
+  call actionmenu#open(['First', 'Second', 'Third'], 'Callback')
+endfunc
+
+func! Callback(index, item)
+  echo "I selected index " . a:index
+endfunc
+```
+
+
+
+## Example with Coc Code Actions (ie. context menu for a language server)
 
 Use the actionmenu to list and execue available code actions [from coc.nvim plugin](https://github.com/neoclide/coc.nvim)
 
@@ -58,22 +74,7 @@ nnoremap <silent> <Leader>s :call ActionMenuCodeActions()<CR>
 
 ## More examples
 
-Simply paste the snippet below into your `.vimrc` then execute `:call Demo()`
-
-```vim
-func! Demo()
-  call actionmenu#open(
-    \ ['First', 'Second', 'Third'],
-    \ 'Callback'
-    \ )
-endfunc
-
-func! Callback(index, item)
-  echo "I selected index " . a:index
-endfunc
-```
-
-Below is an example using vim's `complete-items`
+Below is an example using vim's `complete-items` allowing you to pass in more complex data
 
 ```vim
 func! Demo()
@@ -96,7 +97,7 @@ func! Callback(index, item)
 endfunc
 ```
 
-Open it with a custom icon (i've recently been using [nerdfonts](http://nerdfonts.com/) for this)
+You can open the actionmenu with a custom icon (i've recently been using [nerdfonts](http://nerdfonts.com/) for this)
 
 ```vim
 func! Demo()
