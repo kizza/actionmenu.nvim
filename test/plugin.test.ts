@@ -27,6 +27,17 @@ describe("actionmenu", () => {
       assert.equal(visible, 0);
     }));
 
+  it("does nothing when opened with an empty list", () =>
+    withVim(async nvim => {
+      const initialWindows = await nvim.call("nvim_list_wins");
+
+      await openActionMenu(nvim, []);
+
+      const subsequentWindows = await nvim.call("nvim_list_wins");
+
+      assert.equal(initialWindows.length, subsequentWindows.length);
+    }));
+
   it("opens the pum when called", () =>
     withVim(async nvim => {
       await openActionMenu(nvim, ["One", "Two", "Three"]);

@@ -19,7 +19,9 @@ function! actionmenu#icon() abort
 endfunction
 
 function! actionmenu#open(items, callback, ...) abort
-  let l:opts = get(a:, 1, 0)
+  if empty(a:items)
+    return
+  endif
 
   " Create the buffer
   if !s:buffer
@@ -28,6 +30,7 @@ function! actionmenu#open(items, callback, ...) abort
   endif
 
   " Prepare the menu
+  let l:opts = get(a:, 1, 0)
   if type(l:opts['icon']) == type({})
     let l:icon = l:opts['icon']
   else
