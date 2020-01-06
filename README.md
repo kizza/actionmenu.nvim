@@ -49,6 +49,10 @@ Once both `actionmenu.nvim` and `coc.nvim` are installed, put the folowing in yo
 let s:code_actions = []
 
 func! ActionMenuCodeActions() abort
+  if coc#util#has_float()
+    call coc#util#float_hide()
+  endif
+
   let s:code_actions = CocAction('codeActions')
   let l:menu_items = map(copy(s:code_actions), { index, item -> item['title'] })
   call actionmenu#open(l:menu_items, 'ActionMenuCodeActionsCallback')
