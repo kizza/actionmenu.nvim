@@ -49,8 +49,8 @@ Once both `actionmenu.nvim` and `coc.nvim` are installed, put the folowing in yo
 let s:code_actions = []
 
 func! ActionMenuCodeActions() abort
-  if coc#util#has_float()
-    call coc#util#float_hide()
+  if coc#float#has_float()
+    call coc#float#close_all()
   endif
 
   let s:code_actions = CocAction('codeActions')
