@@ -7,7 +7,7 @@ matrix:
   fast_finish: true
   include:
     - os: osx
-      osx_image: xcode9.1
+      osx_image: xcode12
       env: TEST_COMMAND=test
     - os: linux
       dist: trusty
