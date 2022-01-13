@@ -1,0 +1,55 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: ['12']
+        cc: [gcc]
+        include:
+          - os: ubuntu-latest
+            NVIM_NIGHTLY: nvim-linux64.tar.gz
+            NVIM_BIN_PATH: nvim-linux64/bin
+          - os: macos-latest
+            NVIM_NIGHTLY: nvim-macos.tar.gz
+            NVIM_BIN_PATH: nvim-osx64/bin
+
+    name: Run tests
+    runs-on: ${{ matrix.os }}
+    env:
+      CC: ${{ matrix.cc }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set Node.js
+        uses: actions/setup-node@v2
+        with:
+          cache: yarn
+          node-version: ${{ matrix.node }}
+
+      - name: Install neovim
+        run: |
+          curl -LO "https://github.com/neovim/neovim/releases/download/nightly/${{ matrix.NVIM_NIGHTLY }}"
+          tar xzf ${{ matrix.NVIM_NIGHTLY }}
+          echo "$(pwd)/${{ matrix.NVIM_BIN_PATH }}" >> $GITHUB_PATH
+
+      - name: yarn install
+        run: yarn install --frozen-lockfile
+
+      - name: Run tests
+        env:
+          NODE_ENV: test
+        run: |
+          echo $PATH
+          which nvim
+          nvim --version
+          yarn test
