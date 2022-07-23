@@ -1,4 +1,7 @@
 set nocompatible
+set nobackup
+set nowb
+set noswapfile
 
 let g:test_vimrc_loaded = 1
 
