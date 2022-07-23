@@ -1,7 +1,12 @@
 import assert from "assert";
-import { withVim } from "./helpers/vim";
-import { callbackResult, isComplexItem } from "./helpers/callback";
-import { ENTER, ESC, openActionMenu } from "./helpers";
+import {vimRunner} from "nvim-test-js";
+import * as path from "path";
+import {ENTER, ESC, openActionMenu} from "./helpers";
+import {callbackResult, isComplexItem} from "./helpers/callback";
+
+const withVim = vimRunner(
+  {vimrc: path.resolve(__dirname, "helpers", "vimrc.vim")}
+)
 
 describe("actionmenu", () => {
   it("loads the test vimrc", () =>
@@ -64,7 +69,7 @@ describe("actionmenu", () => {
 
         await nvim.call("feedkeys", [`jjk${ENTER}`]);
 
-        const { index, item } = await callbackResult(nvim);
+        const {index, item} = await callbackResult(nvim);
 
         assert.equal(index, 1);
         assert.equal(item, "Two");
@@ -133,7 +138,7 @@ describe("actionmenu", () => {
           );
 
           await nvim.call("feedkeys", [ESC]);
-          const { index, item } = await callbackResult(nvim);
+          const {index, item} = await callbackResult(nvim);
 
           assert.equal(index, -1);
           assert.equal(item, 0);
@@ -147,7 +152,7 @@ describe("actionmenu", () => {
 
           await nvim.call("feedkeys", [ENTER]);
 
-          const { index, item } = await callbackResult(nvim);
+          const {index, item} = await callbackResult(nvim);
 
           assert.equal(index, 0);
           assert.equal(item, "One");
@@ -155,11 +160,11 @@ describe("actionmenu", () => {
 
       it("returns the selected index and complex item", () =>
         withVim(async nvim => {
-          await openActionMenu(nvim, [{ word: "One", user_data: "Foo" }]);
+          await openActionMenu(nvim, [{word: "One", user_data: "Foo"}]);
 
           await nvim.call("feedkeys", [ENTER]);
 
-          const { index, item } = await callbackResult(nvim);
+          const {index, item} = await callbackResult(nvim);
 
           assert.equal(index, 0);
           assert.equal(isComplexItem(item), true);
@@ -191,7 +196,7 @@ describe("actionmenu", () => {
           const selectItemAndReturn = async () => {
             await openActionMenu(nvim, ["Foo"]);
             await nvim.call("feedkeys", [ENTER]);
-            const { index } = await callbackResult(nvim);
+            const {index} = await callbackResult(nvim);
             return index;
           };
 
@@ -201,7 +206,7 @@ describe("actionmenu", () => {
           const dontSelectAndReturn = async () => {
             await openActionMenu(nvim, ["Foo"]);
             await nvim.call("feedkeys", [ESC]);
-            const { index } = await callbackResult(nvim);
+            const {index} = await callbackResult(nvim);
             return index;
           };
 

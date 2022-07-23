@@ -7,7 +7,7 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.7.7",
     "mocha": "^6.2.0",
-    "neovim": "^4.5.0",
+    "nvim-test-js": "0.0",
     "ts-node": "^8.4.1",
     "typescript": "^3.6.3"
   },

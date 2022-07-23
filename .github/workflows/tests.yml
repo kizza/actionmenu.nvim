@@ -16,11 +16,9 @@ jobs:
         cc: [gcc]
         include:
           - os: ubuntu-latest
-            NVIM_NIGHTLY: nvim-linux64.tar.gz
-            NVIM_BIN_PATH: nvim-linux64/bin
+            NVIM_SLUG: nvim-linux64
           - os: macos-latest
-            NVIM_NIGHTLY: nvim-macos.tar.gz
-            NVIM_BIN_PATH: nvim-osx64/bin
+            NVIM_SLUG: nvim-macos
 
     name: Run tests
     runs-on: ${{ matrix.os }}
@@ -38,9 +36,9 @@ jobs:
 
       - name: Install neovim
         run: |
-          curl -LO "https://github.com/neovim/neovim/releases/download/nightly/${{ matrix.NVIM_NIGHTLY }}"
-          tar xzf ${{ matrix.NVIM_NIGHTLY }}
-          echo "$(pwd)/${{ matrix.NVIM_BIN_PATH }}" >> $GITHUB_PATH
+          curl -LO "https://github.com/neovim/neovim/releases/download/nightly/${{ matrix.NVIM_SLUG }}.tar.gz"
+          tar xzf ${{ matrix.NVIM_SLUG }}.tar.gz
+          echo "$(pwd)/${{ matrix.NVIM_SLUG }}/bin" >> $GITHUB_PATH
 
       - name: yarn install
         run: yarn install --frozen-lockfile
@@ -49,7 +47,5 @@ jobs:
         env:
           NODE_ENV: test
         run: |
-          echo $PATH
-          which nvim
           nvim --version
           yarn test
