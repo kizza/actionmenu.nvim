@@ -1,10 +1,9 @@
 # A nice context menu for vim.
+[![Tests](https://github.com/kizza/actionmenu.nvim/actions/workflows/tests.yml/badge.svg)](https://github.com/kizza/actionmenu.nvim/actions/workflows/tests.yml)
 
 ![Example](https://raw.githubusercontent.com/kizza/actionmenu.nvim/master/images/example.png)
 
 This is intended for use within vim plugins or scripts, to open a context menu and provide a callback with the selected item.
-
-![ci tests](https://github.com/kizza/actionmenu.nvim/actions/workflows/tests.yml/badge.svg)
 
 
 ## Usage

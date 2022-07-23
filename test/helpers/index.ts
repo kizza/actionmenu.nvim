@@ -1,4 +1,4 @@
-import { NeovimClient } from "neovim";
+import {NeovimClient} from "nvim-test-js";
 
 export interface ComplexItem {
   word: string;
