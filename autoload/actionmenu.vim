@@ -27,7 +27,13 @@ function! actionmenu#open(items, callback, ...) abort
   if !s:buffer
     let s:buffer = nvim_create_buf(v:false, v:true)
     call nvim_buf_set_option(s:buffer, 'syntax', 'OFF')
+  else
+    " Clear any lines if present
+    call deletebufline(s:buffer, 1, '$')
   endif
+  " call nvim_buf_set_lines(s:buffer, 0, -1, v:true, [l:icon['character']])
+  let g:foobuf = s:buffer
+  " echom "New buffer is " . s:buffer
 
   " Prepare the menu
   let l:opts = get(a:, 1, 0)
@@ -36,10 +42,31 @@ function! actionmenu#open(items, callback, ...) abort
   else
     let l:icon = actionmenu#icon()
   endif
+  let g:action_text_icon_char = l:icon['character']
 
   " Set the icon
   call nvim_buf_set_option(s:buffer, 'modifiable', v:true)
-  call nvim_buf_set_lines(s:buffer, 0, -1, v:true, [l:icon['character']])
+  " call nvim_buf_set_option(s:buffer, 'listchars', 'precedes:' . icon['character']) " Shows selecting menus
+  " call nvim_buf_set_lines(s:buffer, 0, -1, v:true, [l:icon['character']])
+
+  lua << EOF
+  -- print("doing it")
+  -- local buf = vim.api.nvim_get_current_buf() --
+  local buf = vim.api.nvim_get_var('foobuf')
+  local char = vim.api.nvim_get_var('action_text_icon_char')
+  local ns_id = vim.api.nvim_create_namespace('Foo')
+  -- print("Using buffer " .. buf)
+  vim.api.nvim_set_hl(buf, 'MyVirtText', { bg = '#ff00ff', fg = '#99ccff' }) -- Green virtual text
+  vim.api.nvim_buf_set_extmark(buf, ns_id, 0, 0, {
+    -- sign_text = char,
+    -- sign_hl_group = 'MyVirtText',
+    -- line_hl_group = 'MyVirtText',
+    virt_text = {{ '$', 'MyVirtText' }}, -- Single character with custom highlight
+    virt_text_pos = 'inline', -- Place over the buffer content
+    priority = 1000,
+  })
+  -- vim.api.nvim_command('highlight default HighlightLine guifg=#ff007c gui=bold ctermfg=198 cterm=bold ctermbg=darkgreen')
+EOF
 
   let g:ActionMenuCallback = a:callback
   let g:actionmenu#items = a:items
@@ -64,13 +91,18 @@ function! actionmenu#open(items, callback, ...) abort
   call nvim_win_set_option(g:actionmenu#win, 'number', v:false)
   call nvim_win_set_option(g:actionmenu#win, 'relativenumber', v:false)
   call nvim_win_set_option(g:actionmenu#win, 'cursorline', v:false)
-  call nvim_win_set_option(g:actionmenu#win, 'winhl', 'Normal:Pmenu,NormalNC:Pmenu')
+  call nvim_win_set_option(g:actionmenu#win, 'listchars', 'precedes:' . icon['character']) " Shows selecting menus
+  call nvim_win_set_option(g:actionmenu#win, 'winhl', 'Normal:ActionMenu,Pmenu:ActionMenu,NormalNC:ActionMenu')
 
   " Setup the window
   set filetype=actionmenu
   if !empty(l:icon['foreground'])
-    execute("hi ActionMenuContext ctermfg=" . l:icon['foreground'])
-    syn match ActionMenuContext "."
+    execute("hi ActionMenuContext ctermfg=" . l:icon['foreground'] .. " guibg=#99ccff")
+    execute("hi ActionMenu ctermfg=" . l:icon['foreground'] .. " ctermbg=0 guibg=magenta guifg=green")
+    " When shown via fillchars...
+    " execute("hi NonText ctermfg=" . l:icon['foreground'] . " guifg=blue guibg=red")
+    " execute("hi ActionMenu ctermfg=1 ctermbg=3 guifg=magenta guibg=yellow")
+    " execute("hi ActionMenu ctermfg=1 ctermbg=3 guifg=red guibg=yellow")
   endif
 endfunction
 
@@ -86,7 +118,7 @@ endfunction
 
 function! actionmenu#close()
   if g:actionmenu#win
-    quit
+    call nvim_win_close(g:actionmenu#win, v:true)
     let g:actionmenu#win = 0
   endif
 endfunction

@@ -3,17 +3,35 @@ if get(s:, 'loaded')
   call actionmenu#open_pum()
   finish
 endif
+
 let s:loaded = 1
 
 " Style the buffer
 setlocal signcolumn=no
+" setlocal signcolumn=yes
+setlocal scrolloff=0
 setlocal sidescrolloff=0
+setlocal nowrap
+setlocal guicursor=i:block " To have the highlited square
+" setlocal listchars+=extends:>,precedes:!
 
 " Defaults
 let s:selected_item = 0
 
 function! actionmenu#open_pum()
-  call feedkeys("i\<C-x>\<C-u>")
+  " call feedkeys("i\<C-x>\<C-u>") " Enter insert mode *after* the icon char (so that the pum text isn't visible)
+  call feedkeys("A\<C-x>\<C-u>") " Enter insert mode *after* the icon char (so that the pum text isn't visible)
+  " lua << EOF
+  " require('cmp').complete({
+  "   config = {
+  "     sources = {
+  "       { name = 'buffer' },
+  "       { name = 'path' }
+  "     }
+  "   }
+  " })
+" EOF
+
 endfunction!
 
 function! actionmenu#select_item()
@@ -39,6 +57,20 @@ function! actionmenu#on_insert_leave()
   endif
 endfunction
 
+function! actionmenu#on_complete_changed()
+  echom "Pum changed"
+  if !pumvisible()
+    call actionmenu#close_pum()
+  endif
+endfunction
+
+function! actionmenu#on_complete_done()
+  " if !pumvisible()
+    echom "Pum done"
+  " endif
+  call actionmenu#on_insert_leave()
+endfunction
+
 function! actionmenu#pum_item_to_action_item(item, index) abort
   if type(a:item) == type("")
     return { 'word': a:item, 'user_data': a:index }
@@ -59,24 +91,38 @@ inoremap <nowait><buffer> k <C-p>
 inoremap <nowait><buffer> j <C-n>
 
 " Events
-autocmd InsertLeave <buffer> :call actionmenu#on_insert_leave()
+" autocmd InsertLeave <buffer> :call actionmenu#on_insert_leave()
+autocmd CompleteDone <buffer> :call actionmenu#on_complete_done()
+autocmd CompleteChanged <buffer> :call actionmenu#on_complete_changed()
 
 " pum completion function
 function! actionmenu#complete_func(findstart, base)
   if a:findstart
-    return 1
+    return 0
   else
-    return map(copy(g:actionmenu#items), {
-      \ index, item ->
-      \   actionmenu#pum_item_to_action_item(item, index)
-      \ }
-      \)
+    let items = copy(g:actionmenu#items)
+    let action_items = map(items, {index, item -> actionmenu#pum_item_to_action_item(item, index)})
+    echom "base len=" . a:base->len()
+    if a:base->len() == 0
+      echom "return all"
+      return { 'words': action_items, 'refresh': 'always' }
+    endif
+
+    echom "trying"
+    let matches = filter(action_items, {index, item -> a:base->len() == 0 || item.word =~? a:base})
+
+    " let words = map(copy(g:actionmenu#items), {
+    "   \ index, item ->
+    "   \   actionmenu#pum_item_to_action_item(item, index)
+    "   \ }
+    "   \)
+    return { 'words': matches, 'refresh': 'always' }
   endif
 endfunction
 
 " Set the pum completion function
 setlocal completefunc=actionmenu#complete_func
-setlocal completeopt+=menuone
+setlocal completeopt=menuone,noinsert
 
 " Open the pum immediately
 call actionmenu#open_pum()
